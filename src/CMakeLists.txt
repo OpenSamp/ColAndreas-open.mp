@@ -17,6 +17,10 @@ add_library(${PROJECT_NAME} MODULE ${PLUGIN_SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 	PREFIX ""
+	# Bullet's CMake sets CMAKE_DEBUG_POSTFIX=_Debug in the cache, which would produce
+	# colandreas_Debug.dll on Windows Debug builds and break our CI artifact paths. Force
+	# empty postfix so the output name stays colandreas.{dll,so} regardless of config.
+	DEBUG_POSTFIX ""
 	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
