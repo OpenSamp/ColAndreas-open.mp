@@ -43,6 +43,13 @@ if(CA_ARCH STREQUAL "x86" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	add_link_options(-m32)
 endif()
 
+# Bullet's static libs get linked into our shared module (colandreas.so). Without
+# -fPIC on every subproject, ld rejects the link on Linux:
+#   "relocation R_X86_64_TPOFF32 ... can not be used when making a shared object;
+#    recompile with -fPIC".
+# No-op on Windows (MSVC always produces position-independent code for DLLs).
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # open.mp SDK (interface target; propagates NOMINMAX, /fp:strict, glm, etc.)
 add_subdirectory(lib/open.mp-sdk)
 
